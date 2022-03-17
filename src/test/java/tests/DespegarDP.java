@@ -1,16 +1,20 @@
 package tests;
+
+import org.testng.annotations.Test;
+import org.testng.annotations.DataProvider;
 import static org.testng.AssertJUnit.assertTrue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-public class DespegarTest{
-	
+
+
+public class DespegarDP {
+	WebDriver driver;
 	By alojamientolocator= By.xpath("//a[@href=\"//www.despegar.com.ar/hoteles/\"]");
 	By ingresolocator= By.cssSelector("div.input-container>input[placeholder='Ingresá una ciudad, alojamiento o punto de interés'");
 	By fechaslocator = By.xpath("//div[@class=\"sbox5-box-dates-checkbox-container\"]");
@@ -29,11 +33,12 @@ public class DespegarTest{
 	By resultado = By.cssSelector(".results-cluster-container:nth-child(1) .btn-text");
 	By precio = By.cssSelector("div.results-cluster-container:nth-child(1) div.price-info-wrapper.-eva-3-mt-xsm:nth-child(2) > span.main-value");
 	
-	@Test(description = "Validar selecciones en despegar")
 	
-	public void ValidarBusquedaDespegar() throws Exception {
-	    System.setProperty("webdriver.chrome.driver", "C:\\Users\\max vale papa mama\\Downloads\\instalacionestest\\chromedriver.exe");
+  @Test(dataProvider = "ciudades")
+  public void alojamiento( String ciudades) throws InterruptedException {
+	  System.setProperty("webdriver.chrome.driver", "C:\\Users\\max vale papa mama\\Downloads\\instalacionestest\\chromedriver.exe");
 	    WebDriver driver = new ChromeDriver();
+	    
 	    WebDriverWait wait = new WebDriverWait(driver, 50);
 	    
 	    driver.get("http://despegar.com.ar");
@@ -43,10 +48,10 @@ public class DespegarTest{
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.input-container>input[placeholder='Ingresá una ciudad, alojamiento o punto de interés'")));
 		driver.findElement(ingresolocator).click();
 		Thread.sleep(3000);
-		driver.findElement(ingresolocator).sendKeys("San Carlos de Bariloche");
-		driver.findElement(ingresolocator).sendKeys(Keys.CONTROL);
+		driver.findElement(ingresolocator).clear();
+		driver.findElement(ingresolocator).sendKeys(ciudades);
 		Thread.sleep(3000);
-		driver.findElement(ingresolocator).sendKeys(Keys.ENTER);
+		driver.findElement(ingresolocator).sendKeys(Keys.CONTROL);
 	    Thread.sleep(3000);
 	    
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='searchbox-sbox-box-hotels']//div[@class='sbox5-box-dates-checkbox-container']//div[@class='sbox5-dates-input1']")));
@@ -88,11 +93,18 @@ public class DespegarTest{
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".results-cluster-container:nth-child(1) .btn-text")));
 		assertTrue(driver.findElement(resultado).isDisplayed());
 		
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.results-cluster-container:nth-child(1) div.price-info-wrapper.-eva-3-mt-xsm:nth-child(2) > span.main-value")));
-		System.out.println("El costo es:  $"+ driver.findElement(precio).getText());
-		 
 		
 		driver.close();
-		}
-	}
-	 
+		 
+	  }
+  
+
+  @DataProvider(name = "ciudades")
+  public Object[][] getData() {
+    return new Object[][] {{" San Rafael, Mendoza, Argentina"}, {" Rio de Janeiro, Rio de Janeiro, Brasil"}, {" Mar del Plata, Buenos Aires, Argentina"}};
+    
+  }
+  
+
+
+}

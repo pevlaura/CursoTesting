@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 
 public class DespegarLista{
-	@Test(description = "Validar Clickear cada botón de la barra superior de la página de despegar.com")
+	@Test(description = "Validar Clickear cada botón del meú inferior de la página de despegar.com")
   public void validarBotonesConCiclo() throws Exception{
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\max vale papa mama\\Downloads\\instalacionestest\\chromedriver.exe");
 		  WebDriver driver = new ChromeDriver();
